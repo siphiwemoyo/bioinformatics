@@ -1,6 +1,8 @@
 from matplotlib import pyplot 
+from matplotlib.animation import FuncAnimation
 
 
+seq = 'AGCTCGCTCGCTGCGTATAAAATCGCATCGCGCGCAGC'
 protein_seq = 'IRTNGTHMQPLLKLMKFQKFLLELFTLQKRKPEKGYNLPIISLNQ'
 GES_Scale = {'F':-3.7,'M':-3.4,'I':-3.1,'L':-2.8,'V':-2.6,
              'C':-2.0,'W':-1.9,'A':-1.6,'T':-1.2,'G':-1.0,
@@ -30,6 +32,16 @@ def hydrophob_Search (seq, scale, window_size=15):
     
 scores=hydrophob_Search(protein_seq, GES_Scale)
 
+def update(frame):
 
-pyplot.plot(scores)
+    pyplot.cla()
+    pyplot.plot(scoreList[:frame+1])
+
+
+scores = hydrophob_Search(protein_seq, GES_Scale)
+scoreList = hydrophob_Search(seq, GES_Scale)
+
+fig = pyplot.figure()
+ani = FuncAnimation(fig, update, frames=len(scoreList), interval=500, repeat=False)
+ani.running=True
 pyplot.show()
