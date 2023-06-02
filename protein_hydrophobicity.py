@@ -1,5 +1,6 @@
 from matplotlib import pyplot 
 from matplotlib.animation import FuncAnimation
+from PIL import Image
 
 
 seq = 'AGCTCGCTCGCTGCGTATAAAATCGCATCGCGCGCAGC'
@@ -44,4 +45,13 @@ scoreList = hydrophob_Search(seq, GES_Scale)
 fig = pyplot.figure()
 ani = FuncAnimation(fig, update, frames=len(scoreList), interval=500, repeat=False)
 ani.running=True
+
+images = []
+for i in range(len(scoreList)):
+    update(i)
+    fig.canvas.draw()
+    image = Image.frombytes('RGB', fig.canvas.get_width_height(), fig.canvas.tostring_rgb())
+    images.append(image)
+    
+images[0].save('animation.gif', save_all=True, append_images=images[1:], optimize=False, duration=500, loop=0)
 pyplot.show()
